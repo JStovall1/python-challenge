@@ -18,16 +18,20 @@ with open(file_path) as file:
     candidates = []
     can_vote_perc = 0
     can_vote_total = 0
+    prev_vote = 0
+    next_row = []
+    current_row = []
 
-    
     for row in (csvreader):
-        
-        candidates = {row}
-        ######if row == row + 1
-
+        total_votes += 1
+        next_row = row[2]
+        if str(current_row) != str(next_row):
+            candidates = current_row
+    print(total_votes)
+    print(candidates)
 #   print candidates
         
-        print(candidates)
+        # print(candidates)
 
 # import csv
 # output_path = 'python_output.csv'
