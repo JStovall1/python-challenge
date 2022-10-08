@@ -3,6 +3,7 @@ from doctest import OutputChecker
 import os
 import csv
 
+PROFIT_IDX = 1
 #Name the file path with OS standardization
 file_path = os.path.join('Resources', 'budget_data.csv')
 
@@ -14,31 +15,35 @@ with open(file_path) as file:
     header = next(csvreader)
     
     total_profit = 0
-    max_increase = 0
-    max_decrease = 0
     avg_change = 0
     num_months = 0
     sumchanges = 0
     old_profit = 0
     num_of_changes = 0
-
+    first_row = True
+    
     for row in (csvreader):
         num_months += 1
-        profit = row[1]
-        total_profit = int(total_profit) + int(profit)
-        change = int(profit) - int(old_profit)
-        sumchanges = int(sumchanges) + int(change)
-        num_of_changes = num_months -1
-        avg_change = sumchanges 
+        profit = int(row[PROFIT_IDX])
+        total_profit = total_profit + profit
         
-        if change > int(old_profit):
-            max_increase = change
-            
-        if change < int(old_profit):
-            max_decrease = change
+        if not first_row:
+            num_of_changes +=1
+            change = profit - old_profit
+            sumchanges = sumchanges + change
 
-
+            if num_of_changes == 1:
+                max_increase = change
+                max_decrease = change
+            if change > max_increase:
+                max_increase = change
+            if change < max_decrease:
+                max_decrease = change
+        
         old_profit = profit
+        first_row = False
+    
+    avg_change = sumchanges / num_of_changes
 #   print(header)
     print("Financial Analysis")
     print("___________________________________")
